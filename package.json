@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "description": "Dashboard rekap & statistik data siswa GO Sumenep TA 2026-2027 (data dari Google Apps Script API)",
+  "engines": {
+    "node": ">=18.17.0"
+  },
   "scripts": {
     "dev": "next dev",
     "build": "next build",
