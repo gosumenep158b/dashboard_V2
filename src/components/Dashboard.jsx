@@ -242,7 +242,9 @@ export default function Dashboard() {
       <header className="topbar">
         <div className="topbar-inner">
           <div className="brand">
-            <div className="brand-mark">GO</div>
+            <div className="brand-mark">
+              <img src="/logo-go-standar.webp" alt="Logo Ganesha Operation" />
+            </div>
             <div>
               <div className="brand-title">GO Sumenep</div>
               <div className="brand-sub">Dashboard TA {dashboard.meta.tahunAjaran}</div>
