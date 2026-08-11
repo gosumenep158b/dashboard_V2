@@ -95,7 +95,7 @@ vercel --prod
 | `?action=getStatistikPendaftarBulanan` | Rekap pendaftar per bulan |
 | `?action=getDaftarAsalSekolah`    | Daftar asal sekolah untuk filter |
 | `?action=getDataFasilitasBupel`   | Rekap pengambilan & stok buku  |
-| `?action=getPermintaanTST`        | Permintaan TST                 |
+| `?action=getPermintaanTST`        | Permintaan TST (3 hari ke depan, dari sheet "tst") |
 
 Contoh respons:
 
@@ -112,13 +112,17 @@ apps-script/
 src/
   app/
     layout.js                # root layout (metadata)
-    page.js                  # halaman utama
+    page.js                  # halaman utama (Dashboard)
+    tst/page.js              # halaman Permintaan TST
     globals.css              # styling
     api/
       dashboard/route.js     # proxy getDashboardData + bulanan + sekolah
       statistik/route.js     # proxy getStatistikTingkat (filter sekolah)
+      tst/route.js           # proxy getPermintaanTST
   components/
     Dashboard.jsx            # UI dashboard rekap & statistik
+    Topbar.jsx               # header + navigasi (Dashboard / TST)
+    Tst.jsx                  # UI permintaan TST 3 hari ke depan
   lib/
     appsScript.js            # pemanggil Apps Script (pakai APPS_SCRIPT_URL)
 ```

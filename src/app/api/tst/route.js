@@ -2,7 +2,8 @@ import { callAppsScript } from '@/lib/appsScript';
 
 /**
  * GET /api/tst
- * Mengambil permintaan TST dari sheet TST untuk hari ini sampai tiga hari ke depan.
+ * Mengembalikan daftar permintaan TST siswa untuk hari ini s.d. 3 hari
+ * ke depan (dibaca dari sheet "tst"), lengkap dengan status jadwal.
  */
 export async function GET() {
   try {
@@ -12,4 +13,3 @@ export async function GET() {
     return Response.json({ ok: false, error: err.message }, { status: 500 });
   }
 }
-

@@ -68,22 +68,18 @@ body {
 }
 
 .brand-mark {
-  width: 174px;
-  height: 54px;
-  border-radius: 10px;
-  background: #fff;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: #fff;
   display: flex;
   align-items: center;
-  overflow: hidden;
-  flex-shrink: 0;
-  box-shadow: 0 4px 10px rgba(15, 23, 42, 0.08);
-}
-
-.brand-mark img {
-  display: block;
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 0.02em;
+  box-shadow: 0 4px 10px rgba(220, 38, 38, 0.35);
 }
 
 .brand-title {
@@ -561,6 +557,179 @@ table.data tbody tr:last-child td {
   color: var(--slate-500);
 }
 
+/* ===== Navigasi ===== */
+.nav {
+  display: flex;
+  gap: 4px;
+  background: var(--slate-100);
+  padding: 4px;
+  border-radius: 12px;
+}
+
+.nav-link {
+  padding: 8px 18px;
+  border-radius: 9px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--slate-500);
+  text-decoration: none;
+  transition: all 0.15s ease;
+  white-space: nowrap;
+}
+
+.nav-link:hover {
+  color: var(--ink);
+}
+
+.nav-link.active {
+  background: #fff;
+  color: var(--red-600);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ===== Halaman TST ===== */
+.tst-group {
+  margin-bottom: 20px;
+}
+
+.tst-group-title {
+  font-size: 14px;
+  font-weight: 800;
+  margin: 0 0 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.tst-group-title::before {
+  content: '';
+  width: 4px;
+  height: 16px;
+  border-radius: 999px;
+  background: linear-gradient(180deg, #ef4444, #dc2626);
+  flex: 0 0 4px;
+}
+
+.tst-list {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+}
+
+.tst-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.tst-item-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.tst-name {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-width: 0;
+}
+
+.tst-avatar {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #fecaca, #f87171);
+  color: #991b1b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 15px;
+}
+
+.tst-nama {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.tst-detail {
+  font-size: 12px;
+  color: var(--slate-500);
+}
+
+.tst-phone {
+  color: var(--red-600);
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.tst-phone:hover {
+  text-decoration: underline;
+}
+
+.tst-meta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.tst-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--slate-100);
+  color: var(--ink);
+  border: 1px solid var(--slate-200);
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.tst-jadwal {
+  background: #f8fafc;
+  border: 1px solid var(--slate-200);
+  border-radius: 10px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 4px;
+  font-size: 13px;
+}
+
+.tst-jadwal-row strong {
+  color: var(--slate-500);
+  font-weight: 600;
+  margin-right: 6px;
+}
+
+/* ===== Pill sisa hari ===== */
+.pill-today {
+  background: #dcfce7;
+  color: #15803d;
+  border-color: #bbf7d0;
+}
+
+.pill-tomorrow {
+  background: #fff7ed;
+  color: #c2410c;
+  border-color: #fed7aa;
+}
+
+.pill-later {
+  background: var(--red-50);
+  color: var(--red-700);
+  border-color: var(--red-200);
+}
+
+.badge-muted {
+  background: var(--slate-100);
+  color: var(--slate-500);
+}
+
 /* ===== Banner ===== */
 .banner {
   border-radius: 12px;
@@ -639,154 +808,8 @@ table.data tbody tr:last-child td {
   max-width: 560px;
 }
 
-/* ===== TST navigation & page ===== */
-.dashboard-nav {
-  display: flex;
-  gap: 8px;
-  margin: 22px 0 18px;
-  padding: 5px;
-  width: fit-content;
-  background: #fff;
-  border: 1px solid var(--slate-200);
-  border-radius: 12px;
-  box-shadow: var(--shadow-sm);
-}
-
-.nav-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  border: 0;
-  background: transparent;
-  color: var(--slate-500);
-  padding: 9px 14px;
-  border-radius: 8px;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: background 0.15s ease, color 0.15s ease;
-}
-
-.nav-item svg {
-  width: 16px;
-  height: 16px;
-}
-
-.nav-item:hover,
-.nav-item.active {
-  background: var(--red-50);
-  color: var(--red-700);
-}
-
-.tst-page {
-  display: flex;
-  flex-direction: column;
-  gap: 18px;
-  min-width: 0;
-}
-
-.page-heading,
-.tst-day-heading {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 16px;
-}
-
-.page-heading h1 {
-  margin: 0;
-  font-size: clamp(26px, 4vw, 38px);
-  letter-spacing: -0.04em;
-}
-
-.page-heading .hero-desc {
-  margin: 6px 0 0;
-}
-
-.tst-day {
-  padding: 22px;
-}
-
-.tst-day-heading {
-  align-items: center;
-  margin-bottom: 16px;
-}
-
-.tst-day-heading h2 {
-  margin: 2px 0 0;
-  font-size: 16px;
-}
-
-.tst-date-label {
-  margin: 0;
-  color: var(--red-700);
-  font-size: 14px;
-  font-weight: 800;
-  text-transform: capitalize;
-}
-
-.tst-table th,
-.tst-table td {
-  white-space: nowrap;
-}
-
-.tst-note {
-  margin-top: 3px;
-  white-space: normal;
-}
-
-.badge-tst {
-  color: #9a3412;
-  background: #ffedd5;
-  border-color: #fed7aa;
-}
-
-.empty-state {
-  padding: 34px 24px;
-  text-align: center;
-  color: var(--slate-500);
-}
-
-.empty-state-title {
-  color: var(--ink);
-  font-size: 18px;
-  font-weight: 800;
-}
-
-.empty-state p {
-  margin: 5px 0 0;
-}
-
 /* ===== Responsive ===== */
-@media (max-width: 680px) {
-  .brand-mark {
-    width: 138px;
-    height: 44px;
-  }
-
-  .dashboard-nav {
-    width: 100%;
-  }
-
-  .nav-item {
-    flex: 1;
-    justify-content: center;
-  }
-
-  .page-heading,
-  .tst-day-heading {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .page-heading .btn {
-    align-self: flex-start;
-  }
-
-  .tst-day {
-    padding: 16px;
-  }
-
+@media (max-width: 640px) {
   .kpi-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 12px;
