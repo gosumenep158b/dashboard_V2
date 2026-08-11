@@ -57,6 +57,25 @@ function initials(name) {
   return String(name || '?').trim().charAt(0).toUpperCase();
 }
 
+function formatTstDate(value) {
+  if (!value) return '-';
+  return new Date(value + 'T00:00:00').toLocaleDateString('id-ID', {
+    weekday: 'long',
+    day: 'numeric',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+function groupTstItems(items) {
+  return (items || []).reduce((groups, item) => {
+    const key = item.tanggal || 'tanpa-tanggal';
+    if (!groups[key]) groups[key] = [];
+    groups[key].push(item);
+    return groups;
+  }, {});
+}
+
 const IconUsers = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
@@ -79,6 +98,14 @@ const IconGauge = () => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
     <path d="M12 15l3.5-5.5" />
     <circle cx="12" cy="12" r="9" />
+  </svg>
+);
+
+const IconClipboard = () => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+    <rect x="5" y="4" width="14" height="17" rx="2" />
+    <path d="M9 4.5V3h6v1.5" />
+    <path d="M9 10h6M9 14h6M9 18h3" />
   </svg>
 );
 
@@ -134,8 +161,25 @@ export default function Dashboard() {
   const [statistik, setStatistik] = useState(null);
   const [asal, setAsal] = useState('');
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
-
+    const [error, setError] = useState('');
+  const [view, setView] = useState('dashboard');
+  const [tst, setTst] = useState(null);
+  const [tstLoading, setTstLoading] = useState(false);
+  const [tstError, setTstError] = useState('');
+  const loadTst = useCallback(async () => {
+    setTstLoading(true);
+    setTstError('');
+    try {
+      const response = await fetch('/api/tst');
+      const json = await response.json();
+      if (!json.ok) throw new Error(json.error);
+      setTst(json.data);
+    } catch (e) {
+      setTstError(e.message || 'Gagal memuat permintaan TST.');
+    } finally {
+      setTstLoading(false);
+    }
+  }, []);
   const loadAll = useCallback(async () => {
     setLoading(true);
     setError('');
@@ -160,6 +204,10 @@ export default function Dashboard() {
   useEffect(() => {
     loadAll();
   }, [loadAll]);
+
+  useEffect(() => {
+    if (view === 'tst' && !tst && !tstLoading) loadTst();
+  }, [view, tst, tstLoading, loadTst]);
 
   if (loading && !dash) {
     return (
@@ -271,6 +319,88 @@ export default function Dashboard() {
           </div>
         ) : null}
 
+        <nav className="dashboard-nav" aria-label="Navigasi dashboard">
+          <button
+            className={'nav-item ' + (view === 'dashboard' ? 'active' : '')}
+            onClick={() => setView('dashboard')}
+          >
+            <IconGrid /> Dashboard
+          </button>
+          <button
+            className={'nav-item ' + (view === 'tst' ? 'active' : '')}
+            onClick={() => setView('tst')}
+          >
+            <IconClipboard /> TST
+          </button>
+        </nav>
+
+        {view === 'tst' ? (
+          <section className="tst-page">
+            <div className="page-heading">
+              <div>
+                <p className="hero-eyebrow">Permintaan siswa</p>
+                <h1>Jadwal TST</h1>
+                <p className="hero-desc">Daftar permintaan TST dari hari ini sampai tiga hari ke depan.</p>
+              </div>
+              <button className="btn btn-primary" onClick={loadTst} disabled={tstLoading}>
+                {tstLoading ? 'Memuat...' : 'Segarkan TST'}
+              </button>
+            </div>
+            {tstError ? (
+              <div className="banner banner-error">
+                {tstError}
+                <button className="btn" onClick={loadTst} style={{ marginLeft: 12 }}>Coba Lagi</button>
+              </div>
+            ) : null}
+            {tstLoading && !tst ? (
+              <div className="card empty-state">Memuat permintaan TST...</div>
+            ) : null}
+            {tst && !tstLoading && tst.total === 0 ? (
+              <div className="card empty-state">
+                <div className="empty-state-title">Tidak ada permintaan TST</div>
+                <p>Belum ada permintaan siswa untuk periode {formatTstDate(tst.dari)} sampai {formatTstDate(tst.sampai)}.</p>
+              </div>
+            ) : null}
+            {tst ? Object.entries(groupTstItems(tst.items)).map(([date, items]) => (
+              <section className="card tst-day" key={date}>
+                <div className="tst-day-heading">
+                  <div>
+                    <p className="tst-date-label">{formatTstDate(date)}</p>
+                    <h2>{items.length} permintaan</h2>
+                  </div>
+                  <span className="pill">{date}</span>
+                </div>
+                <div className="table-wrap">
+                  <table className="data tst-table">
+                    <thead>
+                      <tr>
+                        <th>Jam</th>
+                        <th>Nama Siswa</th>
+                        <th>Kelas</th>
+                        <th>Asal Sekolah</th>
+                        <th>Materi</th>
+                        <th>Status</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {items.map((item, index) => (
+                        <tr key={item.rowNumber || index}>
+                          <td className="mono">{item.jam || '-'}</td>
+                          <td><strong>{item.nama || '-'}</strong>{item.catatan ? <div className="muted tst-note">{item.catatan}</div> : null}</td>
+                          <td>{item.kelas || '-'}</td>
+                          <td>{item.asalSekolah || '-'}</td>
+                          <td>{item.materi || '-'}</td>
+                          <td><span className="badge badge-tst">{item.status || 'Menunggu'}</span></td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )) : null}
+          </section>
+        ) : (
+        <>
         <section className="hero">
           <div className="hero-decor hero-decor-1" />
           <div className="hero-decor hero-decor-2" />
@@ -436,6 +566,9 @@ export default function Dashboard() {
             </table>
           </div>
         </div>
+
+        </>
+        )}
 
         <footer className="footer-note">
           Data ditarik langsung dari Google Sheets melalui Apps Script API ·{' '}
